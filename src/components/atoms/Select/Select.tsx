@@ -8,6 +8,7 @@ import ListBox from "./ListBox"
 import ArrowDown from "@/assets/icons/ArrowDown"
 import Popover from "@/components/atoms/Popover"
 import { IItem } from "../Item"
+import { Rotating } from "./Select.styled"
 
 interface ISelect {
 	children: (item: any) => JSX.Element
@@ -55,6 +56,7 @@ const Select = (props: ISelect) => {
 			setSelectedItemKey(selectedItem.key)
 		}
 	}, [selectedItem])
+
 	return (
 		<Context.Provider value={{ selectedItemKey, setSelectedItemKey }}>
 			<div style={{ display: "inline-block" }}>
@@ -70,7 +72,7 @@ const Select = (props: ISelect) => {
 					variant="outlined"
 					{...triggerProps}
 					buttonRef={ref}
-					endIcon={<ArrowDown color="grey900" />}
+					endIcon={<ArrowDown color="grey900" shouldRotate={state.isOpen} />}
 				>
 					{selectedItemKey}
 					<span {...valueProps}>

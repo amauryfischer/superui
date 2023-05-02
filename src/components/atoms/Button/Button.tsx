@@ -40,6 +40,7 @@ const Button = ({
 	...otherProps
 }: IButton) => {
 	let internalRef = useRef<Element>(null)
+	let containerRef = useRef<HTMLDivElement>(null)
 	let { buttonProps, isPressed } = useButton(
 		{
 			...otherProps,
@@ -64,7 +65,7 @@ const Button = ({
 		}
 		if (onPress) {
 			onPress(e)
-		}
+		} // blur target element
 	}
 	const mergedStartIconProps = {
 		isHovering,
@@ -81,7 +82,7 @@ const Button = ({
 
 	return (
 		<>
-			<ButtonContainer {...hoverProps}>
+			<ButtonContainer {...hoverProps} ref={containerRef}>
 				<StyledButton
 					{...otherProps}
 					{...buttonProps}

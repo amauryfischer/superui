@@ -14,6 +14,9 @@ const GlobalStyle = createGlobalStyle`
     }
     * {
         stroke-width: 0.6rem !important;
+        &:focus {
+            outline: none;
+        }
     }
     
 `

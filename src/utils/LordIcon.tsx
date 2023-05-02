@@ -9,10 +9,14 @@ import colored from "./colored"
 
 const LordIconContainer = colored(styled.div<{
 	strokeWidth?: string
+	shouldRotate?: boolean
 }>`
     display: flex;
     align-items: center;
     justify-content: center;
+	transition: transform 0.3s ease-in-out;
+	transform: ${({ shouldRotate }) =>
+		shouldRotate ? "rotate(180deg)" : "rotate(0deg)"};
     * {
         color: var(--color) !important;
         fill: var(--color) !important;
@@ -31,16 +35,22 @@ const LordIcon = ({
 	width = "20px",
 	color,
 	strokeWidth,
+	shouldRotate,
 }: {
 	name: string
 	isHovering?: boolean
 	width?: string
 	color?: string
 	strokeWidth?: string
+	shouldRotate?: boolean
 }) => {
 	if (isHovering === undefined) {
 		return (
-			<LordIconContainer color={color ?? "primary"} strokeWidth={strokeWidth}>
+			<LordIconContainer
+				color={color ?? "primary"}
+				strokeWidth={strokeWidth}
+				shouldRotate={shouldRotate}
+			>
 				<Player
 					autoplay
 					loop
@@ -55,7 +65,11 @@ const LordIcon = ({
 		)
 	}
 	return (
-		<LordIconContainer color={color ?? "primary"} strokeWidth={strokeWidth}>
+		<LordIconContainer
+			color={color ?? "primary"}
+			strokeWidth={strokeWidth}
+			shouldRotate={shouldRotate}
+		>
 			<Player
 				autoplay
 				loop

@@ -1,3 +1,4 @@
+import ArrowDown from "@/assets/icons/ArrowDown"
 import shadow from "@/styles/shadow"
 import {
 	Select as BaseSelect,
@@ -38,4 +39,8 @@ export const StyledListBox = styled(ListBox)`
 	box-shadow: var(--shadow-elevation-medium-elevated) !important;
 	border: 1px solid var(--grey-300);
 	width: 100%;
+`
+export const Rotating = styled.div<{ isOpen: boolean }>`
+	transition: transform 0.2s ease-in-out;
+	transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")} !important;
 `
