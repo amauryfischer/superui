@@ -7,13 +7,21 @@ defineElement(lottie.loadAnimation)
 import styled from "styled-components"
 import colored from "./colored"
 
-const LordIconContainer = colored(styled.div`
+const LordIconContainer = colored(styled.div<{
+	strokeWidth?: string
+}>`
     display: flex;
     align-items: center;
     justify-content: center;
     * {
         color: var(--color) !important;
         fill: var(--color) !important;
+		${({ strokeWidth }) => {
+			if (strokeWidth) {
+				return `stroke-width: ${strokeWidth} !important;`
+			}
+			return `stroke-width: 0.6rem !important;`
+		}}
     }
 `)
 
@@ -22,15 +30,17 @@ const LordIcon = ({
 	isHovering,
 	width = "20px",
 	color,
+	strokeWidth,
 }: {
 	name: string
 	isHovering?: boolean
 	width?: string
 	color?: string
+	strokeWidth?: string
 }) => {
 	if (isHovering === undefined) {
 		return (
-			<LordIconContainer color={color ?? "primary"}>
+			<LordIconContainer color={color ?? "primary"} strokeWidth={strokeWidth}>
 				<Player
 					autoplay
 					loop
@@ -45,11 +55,7 @@ const LordIcon = ({
 		)
 	}
 	return (
-		<LordIconContainer
-			style={{
-				marginBottom: "8px",
-			}}
-		>
+		<LordIconContainer color={color ?? "primary"} strokeWidth={strokeWidth}>
 			<Player
 				autoplay
 				loop
@@ -57,7 +63,9 @@ const LordIcon = ({
 				className="tag-icon"
 				style={{
 					width,
+					height: width,
 					display: isHovering ? "block" : "none",
+					color: color ?? "primary",
 				}}
 			/>
 			<Player
@@ -65,7 +73,9 @@ const LordIcon = ({
 				className="tag-icon"
 				style={{
 					width,
+					height: width,
 					display: isHovering ? "none" : "block",
+					color: color ?? "primary",
 				}}
 			/>
 		</LordIconContainer>

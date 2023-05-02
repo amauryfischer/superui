@@ -1,3 +1,4 @@
+import shadow from "@/styles/shadow"
 import { ComponentType, ReactNode } from "react"
 import styled, { css } from "styled-components"
 
@@ -7,6 +8,7 @@ const colored = (Component: ComponentType<any>) => styled(Component)<{
 	disabled?: boolean
 	loading?: boolean
 }>`
+    ${shadow}
     --opacity: 1;
     ${({ disabled, loading }) => {
 			const isDisabled = disabled || loading
