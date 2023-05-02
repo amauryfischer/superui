@@ -8,6 +8,7 @@ import React, { MouseEventHandler, RefObject, useRef, useState } from "react"
 import { AriaButtonProps, useButton, useHover } from "react-aria"
 import { ButtonProps } from "react-aria-components"
 import type { PressEvent } from "@react-types/shared"
+import Flex from "../Flex"
 export interface IButton extends AriaButtonProps<"button"> {
 	color?: string
 	backgroundColor?: string
@@ -64,9 +65,6 @@ const Button = ({
 		if (onPress) {
 			onPress(e)
 		}
-		if (buttonProps?.onClick) {
-			buttonProps?.onClick(e)
-		}
 	}
 	const mergedStartIconProps = {
 		isHovering,
@@ -75,6 +73,10 @@ const Button = ({
 
 	const overrideStartIcon = startIcon
 		? React.cloneElement(startIcon as React.ReactElement, mergedStartIconProps)
+		: null
+
+	const overrideEndIcon = endIcon
+		? React.cloneElement(endIcon as React.ReactElement, mergedStartIconProps)
 		: null
 
 	return (
@@ -88,27 +90,19 @@ const Button = ({
 					onPress={handleClick}
 					disabled={loading || otherProps.disabled}
 				>
-					{overrideStartIcon ? <>{overrideStartIcon} </> : null}
-					{loading ? (
-						<LoadingContainer>
-							<Loading width="25px" color={otherProps.color} />
-						</LoadingContainer>
-					) : (
-						children
-					)}
+					<Flex gap="size-2" alignItems="center">
+						{overrideStartIcon ? <>{overrideStartIcon} </> : null}
+						{loading ? (
+							<LoadingContainer>
+								<Loading width="25px" color={otherProps.color} />
+							</LoadingContainer>
+						) : (
+							children
+						)}
+						{overrideEndIcon ? <> {overrideEndIcon} </> : null}
+					</Flex>
 				</StyledButton>
 			</ButtonContainer>
-			{/* <button
-				{...buttonProps}
-				{...otherProps}
-				ref={buttonRef}
-				style={{
-					display: "none",
-					marginBottom: "120px",
-				}}
-			>
-				{children}
-			</button> */}
 		</>
 	)
 }

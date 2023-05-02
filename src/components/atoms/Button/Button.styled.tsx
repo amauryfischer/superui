@@ -10,9 +10,7 @@ export const ButtonContainer = styled.div`
     width: fit-content;
     height: fit-content;
 `
-export const StyledButton = colored(styled((props) => {
-	return <BaseButton {...props} />
-})<{
+export const StyledButton = colored(styled(BaseButton)<{
 	variant?: IVariant
 	disabled?: boolean
 	loading?: boolean

@@ -10,4 +10,5 @@ export const Description = styled(Text)`
 export const ItemContainer = styled(Flex)`
     --padding-item-container: var(--size-2) var(--size-4);
     padding: var(--padding-item-container);
+    min-width: 200px;
 `

@@ -1,62 +1,37 @@
-import {
-	Button,
-	Menu,
-	MenuTrigger,
-	Popover,
-	Text,
-	Item as BaseItem,
-} from "react-aria-components"
-import Checkbox from "../Checkbox/Checkbox"
+import { Item as BaseItem } from "react-stately"
 import Flex from "../Flex"
-import { Description, ItemContainer, StyledItem } from "./Item.styled"
-import { useRef, useState } from "react"
+import Checkbox from "../Checkbox/Checkbox"
+import { useContext } from "react"
+import { Context } from "../Select"
+import { ItemContainer } from "./Item.styled"
+
+export interface IItem {
+	title: string
+	subTitle: string
+	key: string
+	isCheckable?: boolean
+	id: string
+}
 
 const Item = ({
-	hasCheckbox,
-	title = "",
-	subTitle = "",
-	hasActions,
+	title,
+	subTitle,
+	isCheckable,
+	key,
+	id,
 	...otherProps
-}: React.ComponentProps<typeof StyledItem> & {
-	title: string
-	subTitle?: string
-}) => {
-	const [checked, setChecked] = useState(false)
+}: IItem) => {
+	const { selectedItemKey } = useContext<any>(Context)
 	return (
-		<BaseItem hasChildItems>
-			<ItemContainer
-				justifyContent="space-between"
-				gap="size-4"
-				onClick={() => {
-					debugger
-					return setChecked(!checked)
-				}}
-			>
-				<Flex gap="size-2">
-					{hasCheckbox && <Checkbox isSelected={checked} />}
-					<Flex direction="column">
-						<Text slot="label">
-							{title} - {checked.toString()}
-						</Text>
-						<Description slot="description">{subTitle}</Description>
-					</Flex>
+		<ItemContainer>
+			<Flex gap="size-4">
+				{isCheckable && <Checkbox isSelected={selectedItemKey === id} />}
+				<Flex direction="column">
+					<div>{title}</div>
+					<div>{subTitle}</div>
 				</Flex>
-				<Flex gap="size-2">
-					{hasActions && (
-						<MenuTrigger>
-							<Button aria-label="Menu">☰</Button>
-							<Popover>
-								<Menu onAction={alert}>
-									<StyledItem id="open">Open</StyledItem>
-									<StyledItem id="rename">Rename…</StyledItem>
-									<StyledItem id="duplicate">Duplicate</StyledItem>
-								</Menu>
-							</Popover>
-						</MenuTrigger>
-					)}
-				</Flex>
-			</ItemContainer>
-		</BaseItem>
+			</Flex>
+		</ItemContainer>
 	)
 }
 

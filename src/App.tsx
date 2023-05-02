@@ -1,22 +1,12 @@
-import { useState } from "react"
 import Button from "@/components/atoms/Button/Button"
-import GlobalStyle from "@/styles/GlobalStyle"
-import IVariant from "./types/styles/IVariant"
-import styled from "styled-components"
-import Loading from "./assets/icons/Loading"
-import Shop from "./assets/icons/Shop"
-import Flex from "./components/atoms/Flex"
-import { Item } from "react-stately"
-import { ListView, Provider, defaultTheme } from "@adobe/react-spectrum"
-import {
-	Dialog,
-	DialogTrigger,
-	ListBox,
-	OverlayArrow,
-	Popover,
-} from "react-aria-components"
 import Select from "@/components/atoms/Select/Select"
-
+import GlobalStyle from "@/styles/GlobalStyle"
+import { ListView, Provider, defaultTheme } from "@adobe/react-spectrum"
+import { useState } from "react"
+import styled from "styled-components"
+import Shop from "./assets/icons/Shop"
+import Flex from "@/components/atoms/Flex"
+import Item from "./components/atoms/Item/Item"
 const BigButton = styled(Button)`
 	--padding-button: var(--size-4) var(--size-8) !important;
 `
@@ -25,22 +15,7 @@ const AppContainer = styled.div`
 	height: 100vh;
 	padding: var(--size-8);
 `
-const SListView = styled(ListView)`
-	& > * { 
-		min-width: 300px !important;
-	}
-	`
-const items = [
-	{ id: 1, name: "Adobe Photoshop" },
-	{ id: 2, name: "Adobe XD" },
-	{ id: 3, name: "Adobe InDesign" },
-	{ id: 4, name: "Adobe AfterEffects" },
-	{ id: 5, name: "Adobe Illustrator" },
-	{ id: 6, name: "Adobe Lightroom" },
-	{ id: 7, name: "Adobe Premiere Pro" },
-	{ id: 8, name: "Adobe Fresco" },
-	{ id: 9, name: "Adobe Dreamweaver" },
-]
+
 const App = () => {
 	const [loading, setLoading] = useState(false)
 	return (
@@ -91,17 +66,28 @@ const App = () => {
 						<GlobalStyle />
 					</Flex>
 					<Flex gap="size-4">
-						<Select label="Favorite Color">
-							<Item>Red</Item>
-							<Item>Orange</Item>
-							<Item>Yellow</Item>
-							<Item>Green</Item>
-							<Item>Blue</Item>
-							<Item>Purple</Item>
-							<Item>Black</Item>
-							<Item>White</Item>
-							<Item>Lime</Item>
-							<Item>Fushsia</Item>
+						<Select
+							label="Favorite Color"
+							items={[
+								{
+									key: "1",
+									title: "red",
+									subTitle: "red",
+									id: "1",
+									isCheckable: true,
+								},
+								{
+									key: "2",
+									title: "blue",
+									subTitle: "blue",
+									id: "2",
+									isCheckable: true,
+								},
+							]}
+						>
+							{(item: any) => {
+								return <Item {...item} />
+							}}
 						</Select>
 					</Flex>
 				</Flex>

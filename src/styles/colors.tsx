@@ -676,6 +676,12 @@ const colors = css`
     var(--grey900-lightness)
   );
 
+  --white: hsl(0, 0%, 100%);
+  --white-text-color: var(--grey900);
+  --white-hue: 0;
+  --white-saturation: 0%;
+  --white-lightness: 100%;
+
   //   ██████  ██████  ██ ███    ███  █████  ██████  ██    ██ 
   // ██   ██ ██   ██ ██ ████  ████ ██   ██ ██   ██  ██  ██  
   // ██████  ██████  ██ ██ ████ ██ ███████ ██████    ████   

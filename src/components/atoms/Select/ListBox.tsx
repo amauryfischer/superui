@@ -1,33 +1,29 @@
-import { useRef } from "react"
+import { RefObject, useRef } from "react"
 import { useListBox, useOption } from "react-aria"
-import type { AriaListBoxOptions } from "react-aria"
-function ListBox(props: any) {
+import type { AriaListBoxOptions, AriaOptionProps } from "react-aria"
+import Checkbox from "../Checkbox/Checkbox"
+import type { ListState } from "react-stately"
+import type { Node } from "react-stately"
+function ListBox<T>(
+	props: AriaListBoxOptions<T> & {
+		state: ListState<T>
+		listBoxRef?: React.MutableRefObject<null>
+	},
+) {
 	let ref = useRef(null)
 	let { listBoxRef = ref, state } = props
-	let { listBoxProps } = useListBox(props, state, listBoxRef)
+	let { listBoxProps } = useListBox<T>(props, state, listBoxRef)
 
 	return (
-		<ul
-			{...listBoxProps}
-			ref={listBoxRef}
-			style={{
-				margin: 0,
-				padding: 0,
-				listStyle: "none",
-				maxHeight: 150,
-				overflow: "auto",
-				minWidth: 100,
-				background: "lightgray",
-			}}
-		>
+		<div {...listBoxProps} ref={listBoxRef}>
 			{[...state.collection].map((item) => (
 				<Option key={item.key} item={item} state={state} />
 			))}
-		</ul>
+		</div>
 	)
 }
 
-function Option({ item, state }: any) {
+function Option<T>({ item, state }: { item: Node<T>; state: ListState<T> }) {
 	let ref = useRef(null)
 	let { optionProps, isSelected, isFocused, isDisabled } = useOption(
 		{ key: item.key },
@@ -36,23 +32,9 @@ function Option({ item, state }: any) {
 	)
 
 	return (
-		<li
-			{...optionProps}
-			ref={ref}
-			style={{
-				background: isFocused ? "gray" : "transparent",
-				color: isDisabled ? "gray" : isFocused ? "white" : "black",
-				padding: "2px 5px",
-				outline: "none",
-				cursor: "pointer",
-				display: "flex",
-				justifyContent: "space-between",
-				gap: "10px",
-			}}
-		>
+		<div {...optionProps} ref={ref}>
 			{item.rendered}
-			{isSelected ? <span>✓</span> : null}
-		</li>
+		</div>
 	)
 }
 
