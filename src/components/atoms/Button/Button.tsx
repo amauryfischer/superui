@@ -4,22 +4,22 @@ import { VariantProp } from "@/types/styles/IVariant"
 import styled from "styled-components"
 import useSound from "use-sound"
 import { ButtonContainer, StyledButton } from "./Button.styled"
-import React, { useState } from "react"
-import { useHover } from "react-aria"
+import React, { MouseEventHandler, RefObject, useRef, useState } from "react"
+import { AriaButtonProps, useButton, useHover } from "react-aria"
 import { ButtonProps } from "react-aria-components"
-interface IButton extends Omit<ButtonProps, "variant"> {
+import type { PressEvent } from "@react-types/shared"
+export interface IButton extends AriaButtonProps<"button"> {
 	color?: string
 	backgroundColor?: string
-	children: JSX.Element | string
+	children: React.ReactNode
 	variant?: VariantProp
 	loading?: boolean
-	onClick?: (e: Event) => void
 	disabled?: boolean
 	noShadow?: boolean
 	noSound?: boolean
 	startIcon?: JSX.Element
 	endIcon?: JSX.Element
-	buttonRef?: React.Ref<HTMLButtonElement>
+	buttonRef?: RefObject<any>
 }
 const LoadingContainer = styled.div`
     display: flex;
@@ -31,28 +31,41 @@ const LoadingContainer = styled.div`
 const Button = ({
 	loading,
 	children,
-	onClick,
+	onPress,
 	noSound,
 	startIcon,
 	endIcon,
 	buttonRef,
 	...otherProps
 }: IButton) => {
+	let internalRef = useRef<Element>(null)
+	let { buttonProps, isPressed } = useButton(
+		{
+			...otherProps,
+			onPress,
+			children,
+		},
+		buttonRef || internalRef,
+	)
+
 	const [play] = useSound(plungerImmediate)
 
 	let { hoverProps, isHovered: isHovering } = useHover({
 		isDisabled: loading,
 	})
 
-	const handleClick = (e: Event) => {
+	const handleClick = (e: PressEvent) => {
 		if (loading) {
 			return
 		}
 		if (!noSound) {
 			play()
 		}
-		if (onClick) {
-			onClick(e)
+		if (onPress) {
+			onPress(e)
+		}
+		if (buttonProps?.onClick) {
+			buttonProps?.onClick(e)
 		}
 	}
 	const mergedStartIconProps = {
@@ -65,24 +78,38 @@ const Button = ({
 		: null
 
 	return (
-		<ButtonContainer {...hoverProps}>
-			<StyledButton
+		<>
+			<ButtonContainer {...hoverProps}>
+				<StyledButton
+					{...otherProps}
+					{...buttonProps}
+					ref={buttonRef || internalRef}
+					loading={loading}
+					onPress={handleClick}
+					disabled={loading || otherProps.disabled}
+				>
+					{overrideStartIcon ? <>{overrideStartIcon} </> : null}
+					{loading ? (
+						<LoadingContainer>
+							<Loading width="25px" color={otherProps.color} />
+						</LoadingContainer>
+					) : (
+						children
+					)}
+				</StyledButton>
+			</ButtonContainer>
+			{/* <button
+				{...buttonProps}
 				{...otherProps}
 				ref={buttonRef}
-				loading={loading}
-				onPress={handleClick}
-				disabled={loading || otherProps.disabled}
+				style={{
+					display: "none",
+					marginBottom: "120px",
+				}}
 			>
-				{overrideStartIcon ? <>{overrideStartIcon} </> : null}
-				{loading ? (
-					<LoadingContainer>
-						<Loading width="25px" color={otherProps.color} />
-					</LoadingContainer>
-				) : (
-					children
-				)}
-			</StyledButton>
-		</ButtonContainer>
+				{children}
+			</button> */}
+		</>
 	)
 }
 

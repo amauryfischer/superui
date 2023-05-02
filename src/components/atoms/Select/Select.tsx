@@ -1,54 +1,50 @@
-import { Item, ListBox, ListView, Picker, Text } from "@adobe/react-spectrum"
-import Button from "@/components/atoms/Button"
-import { Overlay } from "react-aria"
-import {
-	Dialog,
-	DialogTrigger,
-	OverlayArrow,
-	Popover,
-} from "react-aria-components"
-import Flex from "../Flex"
-import styled from "styled-components"
+import { Item, useSelectState } from "react-stately"
+import { HiddenSelect, useSelect } from "react-aria"
 
-const SItem = styled(Item)`
-	& > * {
-		min-width: 300px !important;
-	}
-`
-const items = [
-	{ id: 1, name: "Adobe Photoshop" },
-	{ id: 2, name: "Adobe XD" },
-	{ id: 3, name: "Adobe InDesign" },
-	{ id: 4, name: "Adobe AfterEffects" },
-	{ id: 5, name: "Adobe Illustrator" },
-	{ id: 6, name: "Adobe Lightroom" },
-	{ id: 7, name: "Adobe Premiere Pro" },
-	{ id: 8, name: "Adobe Fresco" },
-	{ id: 9, name: "Adobe Dreamweaver" },
-]
+// Reuse the ListBox, Popover, and Button from your component library. See below for details.
+import { useRef } from "react"
+import Button from "../Button/Button"
+import ListBox from "./ListBox"
+import Popover from "./Popover"
+import SButton from "./SButton"
 
-const Select = (props: any) => {
+function Select(props: any) {
+	// Create state based on the incoming props
+	let state = useSelectState(props)
+
+	// Get props for child elements from useSelect
+	let ref = useRef(null)
+	let { labelProps, triggerProps, valueProps, menuProps } = useSelect(
+		props,
+		state,
+		ref,
+	)
 	return (
-		<>
-			<Picker
-				maxWidth="size-6000"
-				height="500px"
-				width="500px"
-				aria-label="Dynamic ListView items example"
-				label="Pick an animal"
-				items={items}
-				//onSelectionChange={setAnimalId}
-			>
-				<SItem key="rarely" textValue="Rarely">
-					<Flex direction="column" gap="size-2">
-						<Text slot="title">Rarely</Text>
-						<Text slot="description">ok</Text>
-					</Flex>
-				</SItem>
-				<Item key="sometimes">Sometimes</Item>
-				<Item key="always">Always</Item>
-			</Picker>
-		</>
+		<div style={{ display: "inline-block" }}>
+			<div {...labelProps}>{props.label}</div>
+			<HiddenSelect
+				state={state}
+				triggerRef={ref}
+				label={props.label}
+				name={props.name}
+			/>
+			<Button {...triggerProps} buttonRef={ref}>
+				<span {...valueProps}>
+					{state.selectedItem
+						? state.selectedItem.rendered
+						: "Select an option"}
+				</span>
+				<span aria-hidden="true" style={{ paddingLeft: 5 }}>
+					▼
+				</span>
+			</Button>
+			{state.isOpen && (
+				<Popover state={state} triggerRef={ref} placement="bottom start">
+					<ListBox {...menuProps} state={state} />
+				</Popover>
+			)}
+			{state.isOpen.toString()}
+		</div>
 	)
 }
 

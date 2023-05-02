@@ -6,7 +6,8 @@ import styled from "styled-components"
 import Loading from "./assets/icons/Loading"
 import Shop from "./assets/icons/Shop"
 import Flex from "./components/atoms/Flex"
-import { Item, ListView, Provider, defaultTheme } from "@adobe/react-spectrum"
+import { Item } from "react-stately"
+import { ListView, Provider, defaultTheme } from "@adobe/react-spectrum"
 import {
 	Dialog,
 	DialogTrigger,
@@ -14,7 +15,7 @@ import {
 	OverlayArrow,
 	Popover,
 } from "react-aria-components"
-import Select from "./components/atoms/Select/Select"
+import Select from "@/components/atoms/Select/Select"
 
 const BigButton = styled(Button)`
 	--padding-button: var(--size-4) var(--size-8) !important;
@@ -50,7 +51,7 @@ const App = () => {
 						<Button
 							variant="contained"
 							loading={loading}
-							onClick={() => setLoading(!loading)}
+							onPress={() => setLoading(!loading)}
 							noShadow
 						>
 							Contained no shadow
@@ -59,7 +60,7 @@ const App = () => {
 							color="cyan"
 							variant="outlined"
 							loading={loading}
-							onClick={() => setLoading(!loading)}
+							onPress={() => setLoading(!loading)}
 						>
 							Override style
 						</BigButton>
@@ -67,7 +68,7 @@ const App = () => {
 							color="cyan"
 							variant="text"
 							loading={loading}
-							onClick={() => setLoading(!loading)}
+							onPress={() => setLoading(!loading)}
 						>
 							Text
 						</Button>
@@ -90,7 +91,18 @@ const App = () => {
 						<GlobalStyle />
 					</Flex>
 					<Flex gap="size-4">
-						<Select></Select>
+						<Select label="Favorite Color">
+							<Item>Red</Item>
+							<Item>Orange</Item>
+							<Item>Yellow</Item>
+							<Item>Green</Item>
+							<Item>Blue</Item>
+							<Item>Purple</Item>
+							<Item>Black</Item>
+							<Item>White</Item>
+							<Item>Lime</Item>
+							<Item>Fushsia</Item>
+						</Select>
 					</Flex>
 				</Flex>
 			</AppContainer>
