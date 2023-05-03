@@ -5,7 +5,7 @@ export const StyledCheckbox = styled(Checkbox)`
   --label-color: var(--spectrum-alias-text-color);
   --deselected-color: gray;
   --deselected-color-pressed: dimgray;
-  --selected-color: slateblue;
+  --selected-color: var(--primary);
   --selected-color-pressed: lch(from slateblue calc(l - 10%) c h);
   --checkmark-color: white;
   --invalid-color: var(--spectrum-global-color-static-red-600);

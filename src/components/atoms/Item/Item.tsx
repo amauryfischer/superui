@@ -23,7 +23,7 @@ const Item = ({
 }: IItem) => {
 	const { selectedItemKey } = useContext<any>(Context)
 	return (
-		<ItemContainer>
+		<ItemContainer $isSelected={selectedItemKey === id} color="caramel">
 			<Flex gap="size-4">
 				{isCheckable && <Checkbox isSelected={selectedItemKey === id} />}
 				<Flex direction="column">
