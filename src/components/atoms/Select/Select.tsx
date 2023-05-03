@@ -24,7 +24,7 @@ export const Context = React.createContext({
 })
 const Select = (props: ISelect) => {
 	const [selectedItemKey, setSelectedItemKey] = useState<string>("1")
-
+	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const transformSelectChildren = (children: any) => {
 		return function (item: any) {
 			const baseItem = children(item)
@@ -37,6 +37,9 @@ const Select = (props: ISelect) => {
 	const transformedProps = {
 		...props,
 		children: transformSelectChildren(props.children),
+		selectionMode: "multiple",
+		selectionBehavior: "toggle",
+		//isOpen,
 	}
 
 	let state = useSelectState(transformedProps)

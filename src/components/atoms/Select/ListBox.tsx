@@ -1,9 +1,10 @@
-import { RefObject, useRef } from "react"
+import React, { Key, RefObject, useRef } from "react"
 import { useListBox, useOption } from "react-aria"
 import type { AriaListBoxOptions, AriaOptionProps } from "react-aria"
 import Checkbox from "../Checkbox/Checkbox"
 import type { ListState } from "react-stately"
 import type { Node } from "react-stately"
+import { Selection } from "react-stately"
 function ListBox<T>(
 	props: AriaListBoxOptions<T> & {
 		state: ListState<T>
@@ -32,7 +33,32 @@ function Option<T>({ item, state }: { item: Node<T>; state: ListState<T> }) {
 	)
 
 	return (
-		<div {...optionProps} ref={ref}>
+		<div
+			{...optionProps}
+			//onDragStartCapture={() => {}}
+			//onKeyDown={() => {}}
+			//onKeyUp={() => {}}
+			//onDragEnd={() => {}}
+			//onDrag={() => {}}
+			//onDragEnter={() => {}}
+			//onDragExit={() => {}}
+			//onFocus={() => {}}
+			//onSelect={() => {}}
+			aria-label=""
+			data-key
+			id=""
+			//onDoubleClick={() => {}}
+			//onPointerDown={() => {}}
+			//onPointerEnter={() => {}}
+			//onPointerLeave={() => {}}
+			onPointerUp={() => {
+				//state.selectionManager.select(item.key)
+
+				state.selectionManager.toggleSelection(item.key)
+				state.open()
+			}}
+			ref={ref}
+		>
 			{item.rendered}
 		</div>
 	)
