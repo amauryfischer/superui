@@ -1,5 +1,5 @@
 import Button from "@/components/atoms/Button/Button"
-import Select from "@/components/atoms/Select/Select"
+import Select from "@/components/atoms/Select"
 import GlobalStyle from "@/styles/GlobalStyle"
 import { ListView, Provider, defaultTheme } from "@adobe/react-spectrum"
 import { useState } from "react"
@@ -83,10 +83,17 @@ const App = () => {
 									id: "2",
 									isCheckable: true,
 								},
+								{
+									key: "3",
+									title: "green",
+									subTitle: "green",
+									id: "3",
+									isCheckable: true,
+								},
 							]}
 						>
 							{(item: any) => {
-								return <Item {...item} />
+								return <Select.Item {...item} />
 							}}
 						</Select>
 					</Flex>

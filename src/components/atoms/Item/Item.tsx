@@ -4,6 +4,7 @@ import Checkbox from "../Checkbox/Checkbox"
 import { useContext } from "react"
 import { Context } from "../Select"
 import { ItemContainer } from "./Item.styled"
+import { SelectState } from "../Select/useMultipleSelectState"
 
 export interface IItem {
 	title: string
@@ -11,21 +12,14 @@ export interface IItem {
 	key: string
 	isCheckable?: boolean
 	id: string
+	isChecked?: boolean
 }
 
-const Item = ({
-	title,
-	subTitle,
-	isCheckable,
-	key,
-	id,
-	...otherProps
-}: IItem) => {
-	const { selectedItemKey } = useContext<any>(Context)
+const Item = ({ title, subTitle, isCheckable, isChecked }: IItem) => {
 	return (
-		<ItemContainer $isSelected={selectedItemKey === id} color="caramel">
+		<ItemContainer $isSelected={isChecked} color="caramel">
 			<Flex gap="size-4">
-				{isCheckable && <Checkbox isSelected={selectedItemKey === id} />}
+				{isCheckable && <Checkbox isSelected={isChecked} />}
 				<Flex direction="column">
 					<div>{title}</div>
 					<div>{subTitle}</div>

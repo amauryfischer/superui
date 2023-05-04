@@ -5,9 +5,10 @@ import Checkbox from "../Checkbox/Checkbox"
 import type { ListState } from "react-stately"
 import type { Node } from "react-stately"
 import { Selection } from "react-stately"
+import { SelectState } from "./useMultipleSelectState"
 function ListBox<T>(
 	props: AriaListBoxOptions<T> & {
-		state: ListState<T>
+		state: SelectState<T>
 		listBoxRef?: React.MutableRefObject<null>
 	},
 ) {
@@ -24,7 +25,7 @@ function ListBox<T>(
 	)
 }
 
-function Option<T>({ item, state }: { item: Node<T>; state: ListState<T> }) {
+function Option<T>({ item, state }: { item: Node<T>; state: SelectState<T> }) {
 	let ref = useRef(null)
 	let { optionProps, isSelected, isFocused, isDisabled } = useOption(
 		{ key: item.key },
@@ -35,25 +36,18 @@ function Option<T>({ item, state }: { item: Node<T>; state: ListState<T> }) {
 	return (
 		<div
 			{...optionProps}
-			//onDragStartCapture={() => {}}
-			//onKeyDown={() => {}}
-			//onKeyUp={() => {}}
-			//onDragEnd={() => {}}
-			//onDrag={() => {}}
-			//onDragEnter={() => {}}
-			//onDragExit={() => {}}
-			//onFocus={() => {}}
-			//onSelect={() => {}}
-			aria-label=""
-			data-key
-			id=""
-			//onDoubleClick={() => {}}
-			//onPointerDown={() => {}}
-			//onPointerEnter={() => {}}
-			//onPointerLeave={() => {}}
 			onPointerUp={() => {
 				//state.selectionManager.select(item.key)
-
+				if (
+					// @ts-ignore
+					state?.selectedKeys?.length === 1 &&
+					// @ts-ignore
+					state?.selectedKeys?.[0] === item.key
+				) {
+					state.selectionManager.setSelectedKeys([])
+					state.open()
+					return
+				}
 				state.selectionManager.toggleSelection(item.key)
 				state.open()
 			}}

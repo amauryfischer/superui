@@ -20,6 +20,6 @@ export const ItemContainer = colored(styled(Flex)<{ $isSelected?: boolean }>`
 			$isSelected &&
 			css`
             border: 1px solid var(--primary);
-            background-color: hsl(var(--primary-hue), 100%, 95%);
+            background-color: hsl(var(--primary-hue), 100%, 90%);
         `}
 `)

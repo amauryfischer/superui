@@ -8,8 +8,11 @@ import ListBox from "./ListBox"
 import ArrowDown from "@/assets/icons/ArrowDown"
 import Popover from "@/components/atoms/Popover"
 import { IItem } from "../Item"
-import { Rotating } from "./Select.styled"
-
+import { Rotating, SelectTag } from "./Select.styled"
+import useMultipleSelectState, { SelectState } from "./useMultipleSelectState"
+import { SelectState as SingleSelectState } from "react-stately"
+import _ from "lodash"
+import Flex from "../Flex"
 interface ISelect {
 	children: (item: any) => JSX.Element
 	items: Array<IItem>
@@ -18,17 +21,16 @@ interface ISelect {
 //children must be {(item) => <Item>{item}</Item>}
 // items must be an array of objects { title: string, subTitle: string }
 
-export const Context = React.createContext({
-	selectedItemKey: "",
-	setSelectedItemKey: (key: string) => {},
+export const Context = React.createContext<{
+	state: SelectState<IItem> | undefined
+}>({
+	state: undefined,
 })
 const Select = (props: ISelect) => {
-	const [selectedItemKey, setSelectedItemKey] = useState<string>("1")
-	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const transformSelectChildren = (children: any) => {
 		return function (item: any) {
 			const baseItem = children(item)
-			console.log("base item selectedItemId", baseItem.props.selectedItemId)
+
 			return (
 				<Item textValue={item.title}>{React.cloneElement(baseItem, item)}</Item>
 			)
@@ -39,33 +41,25 @@ const Select = (props: ISelect) => {
 		children: transformSelectChildren(props.children),
 		selectionMode: "multiple",
 		selectionBehavior: "toggle",
-		//isOpen,
 	}
 
-	let state = useSelectState(transformedProps)
-
+	let state = useMultipleSelectState(
+		transformedProps,
+	) as unknown as SelectState<IItem>
 	// Get props for child elements from useSelect
 	let ref = useRef(null)
 	let { labelProps, triggerProps, valueProps, menuProps } = useSelect(
 		transformedProps,
-		state,
+		state as unknown as SingleSelectState<IItem>,
 		ref,
 	)
-	const selectedItem = props.items.find(
-		(item) => item.key === state.selectedItem?.key,
-	)
-	useEffect(() => {
-		if (selectedItem && selectedItem.key !== selectedItemKey) {
-			setSelectedItemKey(selectedItem.key)
-		}
-	}, [selectedItem])
 
 	return (
-		<Context.Provider value={{ selectedItemKey, setSelectedItemKey }}>
+		<Context.Provider value={{ state }}>
 			<div style={{ display: "inline-block" }}>
 				<div {...labelProps}>{transformedProps.label}</div>
 				<HiddenSelect
-					state={state}
+					state={state as unknown as SingleSelectState<IItem>}
 					triggerRef={ref}
 					label={transformedProps.label}
 					name={transformedProps.label}
@@ -77,9 +71,42 @@ const Select = (props: ISelect) => {
 					buttonRef={ref}
 					endIcon={<ArrowDown color="grey900" shouldRotate={state.isOpen} />}
 				>
-					{selectedItemKey}
 					<span {...valueProps}>
-						{selectedItem ? selectedItem?.title : "Select an option"}
+						{!_.isEmpty(state.selectedItems) && (
+							<Flex gap="size-1">
+								{state.selectedItems.map((selectedItem) => (
+									<SelectTag
+										onClick={(e) => {
+											debugger
+											e.stopPropagation()
+											e.preventDefault()
+											return state.setSelectedKeys(
+												state?.selectedKeys?.filter(
+													(key) => key !== selectedItem.key,
+												),
+											)
+										}}
+									>
+										<div>{selectedItem.textValue}</div>
+										<div
+											onClick={(e) => {
+												debugger
+												e.stopPropagation()
+												e.preventDefault()
+												return state.setSelectedKeys(
+													state?.selectedKeys?.filter(
+														(key) => key !== selectedItem.key,
+													),
+												)
+											}}
+										>
+											X
+										</div>
+									</SelectTag>
+								))}
+							</Flex>
+						)}
+						{_.isEmpty(state.selectedItems) && "Select an option"}
 					</span>
 				</Button>
 				{state.isOpen && (

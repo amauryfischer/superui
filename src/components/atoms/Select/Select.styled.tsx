@@ -44,3 +44,14 @@ export const Rotating = styled.div<{ isOpen: boolean }>`
 	transition: transform 0.2s ease-in-out;
 	transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")} !important;
 `
+export const SelectTag = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	border: 1px solid var(--grey900);
+	padding: var(--size-1) var(--size-2);
+	border-radius: var(--size-4);
+	gap: var(--size-2);
+	z-index: 9999;
+`
